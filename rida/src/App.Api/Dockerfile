@@ -12,6 +12,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/App.Api/App.Api.csproj", "src/App.Api/"]
+COPY ["src/App.Core/App.Core.csproj", "App.Core/"]
+COPY ["src/App.Core/App.Application.csproj", "App.Application/"]
+COPY ["src/App.Core/App.DataAccess.csproj", "App.DataAccess/"]
 RUN dotnet restore "./src/App.Api/App.Api.csproj"
 COPY . .
 WORKDIR "/src/src/App.Api"

@@ -1,0 +1,60 @@
+﻿services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: src/App.Api/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - ConnectionStrings__AppDbContext=Host=${POSTGRES_HOST};Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    ports:
+      - "${API_PORT}:${API_PORT}"
+
+  nextjs:
+    container_name: next-app
+    build:
+      context: ./src/App.NextApp
+      dockerfile: Dockerfile
+    ports:
+      - "${NEXT_JS_PORT}:${NEXT_JS_PORT}"
+    env_file:
+      - ./src/App.NextApp/.env
+    volumes:
+      - ./src/App.NextApp:/app/src
+      - ./src/App.NextApp:/app/public
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs
+    depends_on:
+      - api
+      - nextjs
+
+volumes:
+  postgres_data:

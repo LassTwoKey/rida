@@ -4,7 +4,7 @@
 
 ```
 "ConnectionStrings": {
-    "AppDbContext": "User ID=postgres;Password=123;Host=localhost;Port=5432;Database=RidaDb;"
+    "AppDbContext": "User ID=userok;Password=123;Host=localhost;Port=5432;Database=RidaDb;"
 },
 ```
 

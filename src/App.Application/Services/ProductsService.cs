@@ -12,6 +12,11 @@ namespace App.Application.Services
             _productsRepository = productsRepository;
         }
 
+        public async Task<Product?> GetProductById(Guid id)
+        {
+            return await _productsRepository.GetById(id);
+        }
+        
         public async Task<List<Product>> GetAllProducts()
         {
             return await _productsRepository.Get();
@@ -29,7 +34,6 @@ namespace App.Application.Services
             bool onSale,
             double rating,
             double price,
-            DateTimeOffset estimatedDeliveryDate,
             string brand,
             bool isFavorite,
             string[] categories,
@@ -43,7 +47,6 @@ namespace App.Application.Services
                 onSale,
                 rating,
                 price,
-                estimatedDeliveryDate,
                 brand,
                 isFavorite,
                 categories,

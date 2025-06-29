@@ -423,7 +423,6 @@ src/App.NextApp/node_modules
 src/App.NextApp/target
 src/App.NextApp/dist
 src/App.NextApp/logs
-src/App.NextApp/public
 src/App.NextApp/.next
 src/App.NextApp/yarn-error.log
 src/App.NextApp/npm-debug.log

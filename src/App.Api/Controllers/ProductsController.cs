@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using App.Api.Contracts;
+using App.Application.Contracts;
 using App.Core.Abstractions;
 using App.Core.Models;
 
@@ -21,6 +21,7 @@ namespace App.Api.Controllers
         public async Task<ActionResult<List<ProductsResponse>>> GetProducts()
         {
             var products = await _productsService.GetAllProducts();
+            var random = new Random();
 
             var productsResponse = products.Select(p => new ProductsResponse(
                 p.Id,
@@ -29,13 +30,39 @@ namespace App.Api.Controllers
                 p.OnSale,
                 p.Rating,
                 p.Price,
-                p.EstimatedDeliveryDate,
+                DateTime.Now.AddDays(random.Next(7, 61)),
                 p.Brand,
                 p.IsFavorite,
                 p.Categories
                 ));
 
             return Ok(productsResponse);
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<ProductsResponse>> GetProductById(Guid id)
+        {
+            var product = await _productsService.GetProductById(id);
+
+            if (product == null)
+            {
+                return NotFound($"Product with ID {id} not found.");
+            }
+
+            var random = new Random();
+
+            return new ProductsResponse(
+                product.Id,
+                product.Title,
+                product.Description,
+                product.OnSale,
+                product.Rating,
+                product.Price,
+                DateTime.Now.AddDays(random.Next(7, 61)),
+                product.Brand,
+                product.IsFavorite,
+                product.Categories
+                );
         }
 
         [HttpPost]
@@ -48,7 +75,6 @@ namespace App.Api.Controllers
                 request.OnSale,
                 request.Rating,
                 request.Price,
-                request.EstimatedDeliveryDate,
                 request.Brand,
                 request.IsFavorite,
                 request.Categories,
@@ -75,7 +101,6 @@ namespace App.Api.Controllers
                 request.OnSale,
                 request.Rating,
                 request.Price,
-                request.EstimatedDeliveryDate,
                 request.Brand,
                 request.IsFavorite,
                 request.Categories,

@@ -1,6 +1,4 @@
-﻿using App.Core.Models;
-
-namespace App.Api.Contracts
+﻿namespace App.Application.Contracts
 {
     public record ProductsResponse(
         Guid Id,
@@ -20,7 +18,6 @@ namespace App.Api.Contracts
         bool OnSale,
         double Rating,
         double Price,
-        DateTimeOffset EstimatedDeliveryDate,
         string Brand,
         bool IsFavorite,
         string[] Categories,

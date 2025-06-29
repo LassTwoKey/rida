@@ -41,7 +41,7 @@
     volumes:
       - ./src/App.NextApp:/app/src
       - ./src/App.NextApp:/app/public
-    restart: always
+    restart: unless-stopped
 
   nginx:
     image: nginx:latest

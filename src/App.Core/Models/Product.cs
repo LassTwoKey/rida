@@ -13,7 +13,6 @@
             bool onSale,
             double rating,
             double price,
-            DateTimeOffset estimatedDeliveryDate,
             string brand,
             bool isFavorite,
             string[] categories,
@@ -26,7 +25,6 @@
             OnSale = onSale;
             Rating = rating;
             Price = price;
-            EstimatedDeliveryDate = estimatedDeliveryDate;
             Brand = brand;
             IsFavorite = isFavorite;
             Categories = categories;
@@ -52,7 +50,6 @@
             bool onSale,
             double rating,
             double price,
-            DateTimeOffset estimatedDeliveryDate,
             string brand,
             bool isFavorite,
             string[] categories,
@@ -77,10 +74,6 @@
             {
                 error = $"Price can't be negative";
             }
-            if (estimatedDeliveryDate <= DateTimeOffset.UtcNow)
-            {
-                error = "Delivery date must be in the future";
-            }
 
             var newPoduct = new Product(
                 id,
@@ -89,7 +82,6 @@
                 onSale,
                 rating,
                 price,
-                estimatedDeliveryDate,
                 brand,
                 isFavorite,
                 categories,

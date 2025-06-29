@@ -27,7 +27,6 @@ namespace App.DataAccess.Repositories
                     p.OnSale,
                     p.Rating,
                     p.Price,
-                    p.EstimatedDeliveryDate,
                     p.Brand,
                     p.IsFavorite,
                     p.Categories,
@@ -35,6 +34,27 @@ namespace App.DataAccess.Repositories
                 ).product).ToList();
 
             return products;
+        }
+
+        public async Task<Product?> GetById(Guid id)
+        {
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            return product == null
+                ? null
+                : Product.Create(
+                    product.Id,
+                    product.Title,
+                    product.Description,
+                    product.OnSale,
+                    product.Rating,
+                    product.Price,
+                    product.Brand,
+                    product.IsFavorite,
+                    product.Categories,
+                    product.IsHidden
+                ).product;
         }
 
         public async Task<Guid> Create(Product product)
@@ -82,7 +102,6 @@ namespace App.DataAccess.Repositories
                     .SetProperty(p => p.OnSale, p => p.OnSale)
                     .SetProperty(p => p.Rating, p => p.Rating)
                     .SetProperty(p => p.Price, p => p.Price)
-                    .SetProperty(p => p.EstimatedDeliveryDate, p => p.EstimatedDeliveryDate)
                     .SetProperty(p => p.Brand, p => p.Brand)
                     .SetProperty(p => p.IsFavorite, p => p.IsFavorite)
                     .SetProperty(p => p.Categories, p => p.Categories)
@@ -98,6 +117,11 @@ namespace App.DataAccess.Repositories
                 .Where(p => p.Id == id)
                 .ExecuteDeleteAsync();
             return id;
+        }
+
+        public Task<Guid> Update(Guid id, string title, string description, bool onSale, double rating, double price, string brand, bool isFavorite, string[] categories, bool isHidden)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -125,8 +125,19 @@ sudo dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 
 sudo apt-get update &&   sudo apt-get install -y dotnet-sdk-9.0
-dotnet tool install --global dotnet-ef
-dotnet tool update --global dotnet-ef
+dotnet tool install --global dotnet-ef --version 9.*
+
+sudo nano ~/.bashrc
+```
+
+Вставляем  и сохраняем
+```
+export PATH="$PATH:$HOME/.dotnet/tools/"
+```
+
+Вызываем
+```
+source ~/.bashrc
 ```
 
 **9. Миграции:**

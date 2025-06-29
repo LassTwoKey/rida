@@ -75,7 +75,7 @@ git clone https://github.com/LassTwoKey/rida.git
 
 **5. Меняем файл .env под себя:**
 
-Посмотреть содержимое **.env**. Для сохранения: **Ctrl+O**, затем **Enter**, а для выхода: **Ctrl+X**
+Посмотреть содержимое `.env`. Для сохранения: **Ctrl+O**, затем **Enter**, а для выхода: **Ctrl+X**
 
 ```
 sudo apt update
@@ -97,7 +97,7 @@ NEXT_JS_PORT=3000
 
 **6. Настройка nginx:**
 
-Посмотреть содержимое **.env**. Поменять `server_name` на свой домен или ip. Для сохранения: **Ctrl+O**, затем **Enter**, а для выхода: **Ctrl+X**
+Посмотреть содержимое `.env`. Поменять `server_name` на свой домен или ip. Для сохранения: **Ctrl+O**, затем **Enter**, а для выхода: **Ctrl+X**
 ```
 cd nginx/conf.d
 sudo nano default.conf

@@ -117,7 +117,19 @@ docker-compose up -d --build
 docker-compose down -v
 ```
 
-**8. Миграции:**
+**8. Установка `dotnet-sdk` и `dotnet-ef`:**
+
+```
+wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+rm packages-microsoft-prod.deb
+
+sudo apt-get update &&   sudo apt-get install -y dotnet-sdk-9.0
+dotnet tool install --global dotnet-ef
+dotnet tool update --global dotnet-ef
+```
+
+**9. Миграции:**
 
 Миграция для апи при работе со слоем бд
 

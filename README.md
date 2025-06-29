@@ -59,8 +59,6 @@ git --version
 **3. Установка Docker Compose:**
 
 ```
-git clone https://github.com/docker/compose.git
-
 ! Latest-версия Docker Compose для установки на Ubuntu тут https://github.com/docker/compose/releases
 sudo curl -L "https://github.com/docker/compose/releases/download/v2.37.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
@@ -77,10 +75,12 @@ git clone https://github.com/LassTwoKey/rida.git
 
 **5. Меняем файл .env под себя:**
 
-Посмотреть содержимое **docker-compose.yml**. Для сохранения: **Ctrl+O**, затем **Enter**, а для выхода: **Ctrl+X**
+Посмотреть содержимое `.env`. Для сохранения: **Ctrl+O**, затем **Enter**, а для выхода: **Ctrl+X**
 
 ```
-sudo nano docker-compose.yml
+sudo apt update
+sudo apt install nano
+sudo nano .env
 ```
 
 ```
@@ -95,7 +95,15 @@ API_PORT=8080
 NEXT_JS_PORT=3000
 ```
 
-**6. Запуск Docker Compose:**
+**6. Настройка nginx:**
+
+Посмотреть содержимое `.default.conf`. Поменять `server_name` на свой домен или ip. Для сохранения: **Ctrl+O**, затем **Enter**, а для выхода: **Ctrl+X**
+```
+cd nginx/conf.d
+sudo nano default.conf
+```
+
+**7. Запуск Docker Compose:**
 
 Пересборка и запуск (при изменении конфигурации)
 
@@ -109,7 +117,7 @@ docker-compose up -d --build
 docker-compose down -v
 ```
 
-**7. Миграции:**
+**8. Миграции:**
 
 Миграция для апи при работе со слоем бд
 

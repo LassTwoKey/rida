@@ -6,7 +6,7 @@ using App.Core.Models;
 namespace App.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
 
     public class ProductsController : Controller
     {

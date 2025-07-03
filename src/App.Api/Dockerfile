@@ -30,4 +30,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "App.Api.dll"]
-1
+2

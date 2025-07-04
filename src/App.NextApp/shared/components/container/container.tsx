@@ -1,9 +1,7 @@
-'use client';
+"use client";
 
 const Container = ({ children }: { children: React.ReactNode }) => {
-    return (
-        <div className='max-w-[1440px] m-auto py-10'>{children}</div>
-    )
-}
+    return <div className="max-w-[1440px] m-auto py-10">{children}</div>;
+};
 
 export default Container;

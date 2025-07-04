@@ -3,6 +3,7 @@ using App.Core.Abstractions;
 using App.DataAccess;
 using App.DataAccess.Repositories;
 using App.Application.Services;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,6 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
     c.AddServer(new OpenApiServer { Url = "/api" });
-    c.DocumentFilter<BasePathFilter>("/api");
 });
 
 builder.Services.AddDbContext<AppDbContext>(

@@ -45,6 +45,8 @@
       - ./src/App.NextApp:/app/src
       - ./src/App.NextApp:/app/public
     restart: unless-stopped
+    networks:
+      - app_network
 
   nginx:
     image: nginx:latest

@@ -1,4 +1,5 @@
 import {Heart,Star,ShoppingBasket} from 'lucide-react'
+import { Button } from "@/shared/ui/button";
 import glass from '@/public/card/glass.png'
 import Image from 'next/image'
 
@@ -29,10 +30,10 @@ const Card = () => {
                 <p>4,2</p>
             </div>
             <div className='flex justify-center items-center'>
-              <button className='border-none p-2 w-full gap-5 bg-[#252527] text-white flex justify-center items-center'>
+              <Button className='cursor-pointer flex justify-center items-center'>
                   <ShoppingBasket color = 'white'/>
                   <p>16 апреля</p>
-              </button>
+              </Button>
             </div>
         </div>
         </div>

@@ -8,7 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    c.AddServer(new OpenApiServer { Url = "/api" });
+    c.DocumentFilter<BasePathFilter>("/api");
+});
 
 builder.Services.AddDbContext<AppDbContext>(
     options => options
@@ -25,10 +30,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "My API V1");
+    });
 
 app.UseAuthorization();
 
+app.UsePathBase(new PathString("/api"));
 app.MapControllers();
 
 app.Run();

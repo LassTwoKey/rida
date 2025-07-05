@@ -1,35 +1,45 @@
 {
-  "name": "rida",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev -p 3040",
-    "build": "next build",
-    "start": "next start -p 3040",
-    "lint": "next lint",
-    "format:check": "prettier --check .",
-    "format": "prettier --write ."
-  },
-  "dependencies": {
-    "@tailwindcss/postcss": "^4.1.11",
-    "axios": "1.7.4",
-    "lucide-react": "^0.525.0",
-    "next": "14.2.5",
-    "postcss": "^8.5.6",
-    "react": "18",
-    "react-dom": "18",
-    "sharp": "^0.34.2",
-    "tailwindcss": "^4.1.11",
-    "zustand": "^5.0.6"
-  },
-  "devDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "4.3.1",
-    "@types/node": "20",
-    "@types/react": "18",
-    "@types/react-dom": "18",
-    "eslint": "8",
-    "eslint-config-next": "14.2.5",
-    "prettier": "3.3.3",
-    "typescript": "5"
-  }
+    "name": "rida",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev -p 3040",
+        "build": "next build",
+        "start": "next start -p 3040",
+        "lint": "next lint",
+        "format:check": "prettier --check .",
+        "format": "prettier --write ."
+    },
+    "dependencies": {
+        "@radix-ui/react-checkbox": "^1.3.2",
+        "@radix-ui/react-dialog": "^1.1.14",
+        "@radix-ui/react-slot": "^1.2.3",
+        "@tailwindcss/postcss": "^4.1.11",
+        "axios": "1.7.4",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "init": "^0.1.2",
+        "lucide-react": "^0.525.0",
+        "next": "14.2.5",
+        "postcss": "^8.5.6",
+        "react": "18",
+        "react-dom": "18",
+        "shadcn": "^2.7.0",
+        "sharp": "^0.34.2",
+        "tailwind-merge": "^3.3.1",
+        "tailwindcss": "^4.1.11",
+        "vaul": "^1.1.2",
+        "zustand": "^5.0.6"
+    },
+    "devDependencies": {
+        "@ianvs/prettier-plugin-sort-imports": "4.3.1",
+        "@types/node": "20",
+        "@types/react": "18",
+        "@types/react-dom": "18",
+        "eslint": "8",
+        "eslint-config-next": "14.2.5",
+        "prettier": "3.3.3",
+        "tw-animate-css": "^1.3.5",
+        "typescript": "5"
+    }
 }

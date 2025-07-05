@@ -127,8 +127,8 @@ wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.
 sudo dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 
-sudo apt-get update &&   sudo apt-get install -y dotnet-sdk-9.0
-dotnet tool install --global dotnet-ef --version 9.*
+sudo apt-get update &&   sudo apt-get install -y dotnet-sdk-8.0
+dotnet tool install --global dotnet-ef --version 8.*
 
 sudo nano ~/.bashrc
 ```
@@ -150,13 +150,13 @@ source ~/.bashrc
 Миграция для апи при работе со слоем бд
 
 ```
-dotnet ef migrations add initial -s .\src\App.Api\ -p .\src\App.DataAccess\
+dotnet ef migrations add initial -s ./src/App.Api -p ./src/App.DataAccess
 ```
 
 Применение миграций
 
 ```
-dotnet ef database update -s .\src\App.Api\ -p .\src\App.DataAccess\
+dotnet ef database update -s ./src/App.Api -p ./src/App.DataAccess
 ```
 
 Для обновления миграций. Надо **остановить** контейнеры и **запустить** обратно.

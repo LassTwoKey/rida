@@ -1,5 +1,5 @@
 "use client";
 
 export const AppProvider = () => {
-  return <div></div>;
+    return <div></div>;
 };

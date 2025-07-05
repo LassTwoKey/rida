@@ -1,6 +1,5 @@
 import type { FC } from "react";
-
-import cn from '../../lib/cn'
+import { cn } from "@/shared/lib/utils";
 
 interface IconProps {
     className?: string;
@@ -11,23 +10,20 @@ interface IconProps {
 }
 
 const Icon: FC<IconProps> = ({
-                                 className,
-                                 width = "20px",
-                                 height = "21px",
-                                 color = "#FFFFFF",
-                                 path,
-                             }) => {
+    className,
+    width = "20px",
+    height = "21px",
+    color = "#FFFFFF",
+    path
+}) => {
     return (
         <div
-            className={`${cn(
-                `icon`,
-                color.charAt(0) !== "#" ? color : ""
-            )} ${className}`}
+            className={`${cn(`icon`, color.charAt(0) !== "#" ? color : "")} ${className}`}
             style={{
                 maskImage: `url("${path}")`,
                 backgroundColor: color.charAt(0) === "#" ? color : "",
                 width,
-                height,
+                height
             }}
         ></div>
     );

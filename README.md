@@ -91,10 +91,11 @@ POSTGRES_USER=userok
 POSTGRES_PASSWORD=123
 
 POSTGRES_PORT=5432
+CLOUDINARY_URL=cloudinary://282124832381266:UDD9HpinE9qYbf4d12GX3G9-Frs@dlcyezkmv
+
+# Next JS (don't touch)
 API_PORT=8080
 NEXT_JS_PORT=3000
-
-CLOUDINARY_URL=cloudinary://<your_api_key>:<your_api_secret>@sometxtfromapi
 ```
 
 **6. Настройка nginx:**

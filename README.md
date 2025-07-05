@@ -93,11 +93,14 @@ POSTGRES_PASSWORD=123
 POSTGRES_PORT=5432
 API_PORT=8080
 NEXT_JS_PORT=3000
+
+CLOUDINARY_URL=cloudinary://<your_api_key>:<your_api_secret>@sometxtfromapi
 ```
 
 **6. Настройка nginx:**
 
 Посмотреть содержимое `.default.conf`. Поменять `server_name` на свой домен или ip. Для сохранения: **Ctrl+O**, затем **Enter**, а для выхода: **Ctrl+X**
+
 ```
 cd nginx/conf.d
 sudo nano default.conf
@@ -130,12 +133,14 @@ dotnet tool install --global dotnet-ef --version 9.*
 sudo nano ~/.bashrc
 ```
 
-Вставляем  и сохраняем
+Вставляем и сохраняем
+
 ```
 export PATH="$PATH:$HOME/.dotnet/tools/"
 ```
 
 Вызываем
+
 ```
 source ~/.bashrc
 ```

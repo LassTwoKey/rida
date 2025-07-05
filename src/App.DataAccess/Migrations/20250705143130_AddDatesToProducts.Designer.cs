@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace App.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250704152057_initial")]
-    partial class initial
+    [Migration("20250705143130_AddDatesToProducts")]
+    partial class AddDatesToProducts
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,20 +39,34 @@ namespace App.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("EstimatedDeliveryDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("Discount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImgId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImgPreviewUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsFavorite")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsHidden")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("OnSale")
                         .HasColumnType("boolean");
 
                     b.Property<double>("Price")

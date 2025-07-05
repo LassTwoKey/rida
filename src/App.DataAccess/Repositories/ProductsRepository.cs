@@ -24,13 +24,18 @@ namespace App.DataAccess.Repositories
                     p.Id,
                     p.Title,
                     p.Description,
-                    p.OnSale,
+                    p.Discount,
                     p.Rating,
                     p.Price,
                     p.Brand,
                     p.IsFavorite,
                     p.Categories,
-                    p.IsHidden
+                    p.IsHidden,
+                    p.CreatedDate,
+                    p.ChangedDate,
+                    p.ImgUrl,
+                    p.ImgPreviewUrl,
+                    p.ImgId
                 ).product).ToList();
 
             return products;
@@ -47,14 +52,18 @@ namespace App.DataAccess.Repositories
                     product.Id,
                     product.Title,
                     product.Description,
-                    product.OnSale,
+                    product.Discount,
                     product.Rating,
                     product.Price,
                     product.Brand,
                     product.IsFavorite,
                     product.Categories,
-                    product.IsHidden
-                ).product;
+                    product.IsHidden,
+                    product.CreatedDate,
+                    product.ChangedDate,
+                    product.ImgUrl,
+                    product.ImgPreviewUrl,
+                    product.ImgId).product;
         }
 
         public async Task<Guid> Create(Product product)
@@ -64,14 +73,18 @@ namespace App.DataAccess.Repositories
                 Id = product.Id,
                 Title = product.Title,
                 Description = product.Description,
-                OnSale = product.OnSale,
+                Discount = product.Discount,
                 Rating = product.Rating,
                 Price = product.Price,
-                EstimatedDeliveryDate = product.EstimatedDeliveryDate,
                 Brand = product.Brand,
                 IsFavorite = product.IsFavorite,
                 Categories = product.Categories,
-                IsHidden = product.IsHidden
+                IsHidden = product.IsHidden,
+                CreatedDate = product.CreatedDate,
+                ChangedDate = product.ChangedDate,
+                ImgUrl = product.ImgUrl,
+                ImgPreviewUrl = product.ImgPreviewUrl,
+                ImgId = product.ImgId,
             };
 
             await _context.Products.AddAsync(productEntity);
@@ -84,28 +97,35 @@ namespace App.DataAccess.Repositories
             Guid id,
             string title,
             string description,
-            bool onSale,
+            int discount,
             double rating,
             double price,
-            DateTimeOffset estimatedDeliveryDate,
             string brand,
             bool isFavorite,
             string[] categories,
-            bool isHidden
+            bool isHidden,
+            DateTime changedDate,
+            string imgUrl,
+            string imgPreviewUrl,
+            string? imgId
         )
         {
             await _context.Products
                 .Where(p => p.Id == id)
                 .ExecuteUpdateAsync(s => s
-                    .SetProperty(p => p.Title, p => p.Title)
-                    .SetProperty(p => p.Description, p => p.Title)
-                    .SetProperty(p => p.OnSale, p => p.OnSale)
-                    .SetProperty(p => p.Rating, p => p.Rating)
-                    .SetProperty(p => p.Price, p => p.Price)
-                    .SetProperty(p => p.Brand, p => p.Brand)
-                    .SetProperty(p => p.IsFavorite, p => p.IsFavorite)
-                    .SetProperty(p => p.Categories, p => p.Categories)
-                    .SetProperty(p => p.IsHidden, p => p.IsHidden)
+                    .SetProperty(p => p.Title, title)
+                    .SetProperty(p => p.Description, description)
+                    .SetProperty(p => p.Discount, discount)
+                    .SetProperty(p => p.Rating, rating)
+                    .SetProperty(p => p.Price, price)
+                    .SetProperty(p => p.Brand, brand)
+                    .SetProperty(p => p.IsFavorite, isFavorite)
+                    .SetProperty(p => p.Categories, categories)
+                    .SetProperty(p => p.IsHidden, isHidden)
+                    .SetProperty(p => p.ChangedDate, changedDate)
+                    .SetProperty(p => p.ImgUrl, imgUrl)
+                    .SetProperty(p => p.ImgPreviewUrl, imgPreviewUrl)
+                    .SetProperty(p => p.ImgId, imgId)
                 );
 
             return id;
@@ -117,11 +137,6 @@ namespace App.DataAccess.Repositories
                 .Where(p => p.Id == id)
                 .ExecuteDeleteAsync();
             return id;
-        }
-
-        public Task<Guid> Update(Guid id, string title, string description, bool onSale, double rating, double price, string brand, bool isFavorite, string[] categories, bool isHidden)
-        {
-            throw new NotImplementedException();
         }
     }
 }

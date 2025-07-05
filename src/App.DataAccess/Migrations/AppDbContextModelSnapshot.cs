@@ -36,20 +36,34 @@ namespace App.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text[]");
 
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("EstimatedDeliveryDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("Discount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImgId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImgPreviewUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsFavorite")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsHidden")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("OnSale")
                         .HasColumnType("boolean");
 
                     b.Property<double>("Price")

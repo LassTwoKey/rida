@@ -16,7 +16,7 @@ namespace App.Application.Services
         {
             return await _productsRepository.GetById(id);
         }
-        
+
         public async Task<List<Product>> GetAllProducts()
         {
             return await _productsRepository.Get();
@@ -31,26 +31,34 @@ namespace App.Application.Services
             Guid id,
             string title,
             string description,
-            bool onSale,
+            int discount,
             double rating,
             double price,
             string brand,
             bool isFavorite,
             string[] categories,
-            bool isHidden
+            bool isHidden,
+            DateTime changedDate,
+            string imgUrl,
+            string imgPreviewUrl,
+            string? imgId
         )
         {
             return await _productsRepository.Update(
                 id,
                 title,
                 description,
-                onSale,
+                discount,
                 rating,
                 price,
                 brand,
                 isFavorite,
                 categories,
-                isHidden
+                isHidden,
+                changedDate,
+                imgUrl,
+                imgPreviewUrl,
+                imgId
             );
         }
 

@@ -10,51 +10,68 @@
             Guid id,
             string title,
             string description,
-            bool onSale,
+            int discount,
             double rating,
             double price,
             string brand,
             bool isFavorite,
             string[] categories,
-            bool isHidden
-        )
+            bool isHidden,
+            DateTime changedDate,
+            DateTime createdDate,
+            string imgUrl,
+            string imgPreviewUrl,
+            string? imgId)
         {
             Id = id;
             Title = title;
             Description = description;
-            OnSale = onSale;
+            Discount = discount;
             Rating = rating;
             Price = price;
             Brand = brand;
             IsFavorite = isFavorite;
             Categories = categories;
             IsHidden = isHidden;
+            CreatedDate = createdDate;
+            ChangedDate = changedDate;
+            ImgUrl = imgUrl;
+            ImgPreviewUrl = imgPreviewUrl;
+            ImgId = imgId;
         }
 
         public Guid Id { get; }
         public string Title { get; } = string.Empty;
         public string Description { get; } = string.Empty;
-        public bool OnSale { get; }
+        public int Discount { get; }
         public double Rating { get; }
         public double Price { get; }
-        public DateTimeOffset EstimatedDeliveryDate { get; }
         public string Brand { get; } = string.Empty;
         public bool IsFavorite { get; }
         public string[] Categories { get; }
         public bool IsHidden { get; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ChangedDate { get; set; }
+        public string ImgUrl { get; }
+        public string ImgPreviewUrl { get; }
+        public string? ImgId { get; }
 
         public static (Product product, string Error) Create(
             Guid id,
             string title,
             string description,
-            bool onSale,
+            int discount,
             double rating,
             double price,
             string brand,
             bool isFavorite,
             string[] categories,
-            bool isHidden
-        )
+            bool isHidden,
+            DateTime createdDate,
+            DateTime changedDate,
+            string imgUrl,
+            string imgPreviewUrl,
+            string? imgId)
         {
             var error = string.Empty;
 
@@ -79,13 +96,18 @@
                 id,
                 title,
                 description,
-                onSale,
+                discount,
                 rating,
                 price,
                 brand,
                 isFavorite,
                 categories,
-                isHidden
+                isHidden,
+                createdDate,
+                changedDate,
+                imgUrl,
+                imgPreviewUrl,
+                imgId
             );
 
             return (newPoduct, error);

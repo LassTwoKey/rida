@@ -3,7 +3,7 @@ import axios from "axios";
 
 const CoreAbortController = new AbortController();
 
-const baseURL = process.env.NODE_ENV === "production" ? "localhost:8080" : "147.78.66.97";
+const baseURL = process.env.NODE_ENV === "production" ? window.location.host : "147.78.66.97";
 
 const CoreHttp = axios.create({
     withCredentials: true,

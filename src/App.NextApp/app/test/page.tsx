@@ -8,11 +8,13 @@ import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import Footer from "@/widgets/footer/footer";
 import Header from "@/widgets/header/header";
+import FaqQuestion from "@/features/faq-question/faq-question";
+import BrandsPartners from "@/features/partners/brands-partners";
 
 const TestPage = () => {
     return (
         <Container>
-            <DeliveryPartners />
+            <BrandsPartners/>
         </Container>
     );
 };

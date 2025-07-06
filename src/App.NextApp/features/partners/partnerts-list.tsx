@@ -4,7 +4,7 @@ import { Button } from "@/shared/ui/button";
 
 const PartnertsList = () => {
     return (
-        <div className="flex flex-col mt-10">
+        <div className="flex flex-col my-6">
             <h3 className="uppercase text-2xl font-involve">Новые партнёры</h3>
             <div className="grid grid-cols-1 gap-5 mt-7">
                 {Array.from({ length: 3 }).map((_, i) => (

@@ -10,11 +10,12 @@ import Footer from "@/widgets/footer/footer";
 import Header from "@/widgets/header/header";
 import FaqQuestion from "@/features/faq-question/faq-question";
 import BrandsPartners from "@/features/partners/brands-partners";
+import Filters from "@/features/filters/filters";
 
 const TestPage = () => {
     return (
         <Container>
-            <BrandsPartners/>
+            <Filters/>
         </Container>
     );
 };

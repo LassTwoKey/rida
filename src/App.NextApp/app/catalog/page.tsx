@@ -1,11 +1,13 @@
-
-
+import Filters from "@/features/filters/filters";
+import BrandsPartners from "@/features/partners/brands-partners";
 
 const CatalogPage = () => {
-    return(
-        <>
-        </>
-    )
-}
+    return (
+        <div className="flex flex-col gap-8">
+            <BrandsPartners />
+            <Filters />
+        </div>
+    );
+};
 
-export default  CatalogPage
+export default CatalogPage;

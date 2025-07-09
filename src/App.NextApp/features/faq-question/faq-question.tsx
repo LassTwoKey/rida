@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
 import { useState } from "react";
-import { X, Plus } from 'lucide-react'
 import { FAQ_LIST } from "@/shared/constants/faq/faq-list";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { Plus, X } from "lucide-react";
 
 const FaqQuestion = () => {
     const [chosenQuestion, setChosenQuestion] = useState<number | null>(null);
@@ -12,20 +12,24 @@ const FaqQuestion = () => {
         id === chosenQuestion ? setChosenQuestion(null) : setChosenQuestion(id);
 
     return (
-        <div className='flex flex-col gap-2 my-6'>
-            <h3 className='text-3xl'>FAQ</h3>
-            <div className='grid grid-cols-1 gap-5 mt-6'>
-                {FAQ_LIST.map(item => (
+        <div className="flex flex-col gap-2 my-6">
+            <h3 className="text-3xl">FAQ</h3>
+            <div className="grid grid-cols-1 gap-5 mt-6">
+                {FAQ_LIST.map((item) => (
                     <div
                         key={item.id}
                         onClick={() => onHandleChooseQuestion(item.id)}
-                        className='flex cursor-pointer flex-col gap-3 duration-100'
+                        className="flex cursor-pointer flex-col gap-3 duration-100"
                     >
-                        <div className='flex justify-between items-start'>
-                            <h4 className='text-xl font-semibold uppercase max-w-[298px] lg:max-w-full'>
+                        <div className="flex justify-between items-start">
+                            <h4 className="text-xl font-semibold uppercase max-w-[298px] lg:max-w-full">
                                 {item.title}
                             </h4>
-                            {chosenQuestion === item.id ? <X size={32} fill = '#A9A9A9' /> : <Plus size={32} fill = '#A9A9A9' />}
+                            {chosenQuestion === item.id ? (
+                                <X size={32} fill="#A9A9A9" />
+                            ) : (
+                                <Plus size={32} fill="#A9A9A9" />
+                            )}
                         </div>
 
                         <AnimatePresence>
@@ -41,12 +45,12 @@ const FaqQuestion = () => {
                             )}
                         </AnimatePresence>
 
-                        <div className='w-full h-[1px] bg-[#0000004D]' />
+                        <div className="w-full h-[1px] bg-[#0000004D]" />
                     </div>
                 ))}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default FaqQuestion;

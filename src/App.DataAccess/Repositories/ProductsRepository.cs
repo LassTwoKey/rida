@@ -9,6 +9,49 @@ namespace App.DataAccess.Repositories
     {
         private readonly AppDbContext _context;
 
+        private async Task UpdateProductCategoriesAsync(ProductEntity product, ICollection<Category> newCategories)
+        {
+            if (newCategories == null || newCategories.Count == 0)
+            {
+                // Если список пуст или null — удаляем все категории
+                product.Categories.Clear();
+                return;
+            }
+
+            // Получаем ID всех категорий из входного списка
+            var requestedCategoryIds = newCategories.Select(c => c.Id).ToList();
+
+            // Находим только те, которые реально существуют в БД
+            var existingValidCategoryIds = await _context.Categories
+                .Where(c => requestedCategoryIds.Contains(c.Id))
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            // Текущие категории у продукта
+            var currentCategoryIds = product.Categories.Select(c => c.Id).ToList();
+
+            // Удаляем категории, которых больше нет в списке (даже если они были)
+            var toRemove = product.Categories
+                .Where(c => !existingValidCategoryIds.Contains(c.Id))
+                .ToList();
+            foreach (var category in toRemove)
+            {
+                product.Categories.Remove(category);
+            }
+
+            // Добавляем только существующие и ещё не привязанные категории
+            var toAdd = existingValidCategoryIds
+                .Where(id => !currentCategoryIds.Contains(id))
+                .Select(id => new CategoryEntity { Id = id })
+                .ToList();
+
+            foreach (var category in toAdd)
+            {
+                _context.Attach(category); // говорим EF: "это существующая сущность"
+                product.Categories.Add(category);
+            }
+        }
+
         public ProductsRepository(AppDbContext context)
         {
             _context = context;
@@ -17,6 +60,7 @@ namespace App.DataAccess.Repositories
         public async Task<List<Product>> Get()
         {
             var productEntities = await _context.Products
+                .Include(p => p.Categories)
                 .AsNoTracking().ToListAsync();
 
             var products = productEntities
@@ -29,7 +73,7 @@ namespace App.DataAccess.Repositories
                     p.Price,
                     p.Brand,
                     p.IsFavorite,
-                    p.Categories,
+                    [.. p.Categories.Select(c => Category.Create(c.Id, c.Title, c.Description).category)],
                     p.IsHidden
                 ).product).ToList();
 
@@ -41,9 +85,13 @@ namespace App.DataAccess.Repositories
             var product = await _context.Products
                 .FirstOrDefaultAsync(p => p.Id == id);
 
-            return product == null
-                ? null
-                : Product.Create(
+
+            if (product != null)
+            {
+                var categories = product.Categories.Select(c => Category.Create(
+                    c.Id, c.Title, c.Description).category).ToList();
+
+                return Product.Create(
                     product.Id,
                     product.Title,
                     product.Description,
@@ -52,13 +100,22 @@ namespace App.DataAccess.Repositories
                     product.Price,
                     product.Brand,
                     product.IsFavorite,
-                    product.Categories,
+                    categories,
                     product.IsHidden
                 ).product;
+            }
+
+            return null;
         }
 
         public async Task<Guid> Create(Product product)
         {
+            var categories = product.Categories.Select(c => new CategoryEntity() {
+                Id = c.Id,
+                Title = c.Title,
+                Description = c.Description
+            }).ToList();
+
             var productEntity = new ProductEntity
             {
                 Id = product.Id,
@@ -70,7 +127,7 @@ namespace App.DataAccess.Repositories
                 EstimatedDeliveryDate = product.EstimatedDeliveryDate,
                 Brand = product.Brand,
                 IsFavorite = product.IsFavorite,
-                Categories = product.Categories,
+                Categories = categories,
                 IsHidden = product.IsHidden
             };
 
@@ -87,26 +144,28 @@ namespace App.DataAccess.Repositories
             bool onSale,
             double rating,
             double price,
-            DateTimeOffset estimatedDeliveryDate,
             string brand,
             bool isFavorite,
-            string[] categories,
+            ICollection<Category> categories,
             bool isHidden
         )
         {
-            await _context.Products
-                .Where(p => p.Id == id)
-                .ExecuteUpdateAsync(s => s
-                    .SetProperty(p => p.Title, p => p.Title)
-                    .SetProperty(p => p.Description, p => p.Title)
-                    .SetProperty(p => p.OnSale, p => p.OnSale)
-                    .SetProperty(p => p.Rating, p => p.Rating)
-                    .SetProperty(p => p.Price, p => p.Price)
-                    .SetProperty(p => p.Brand, p => p.Brand)
-                    .SetProperty(p => p.IsFavorite, p => p.IsFavorite)
-                    .SetProperty(p => p.Categories, p => p.Categories)
-                    .SetProperty(p => p.IsHidden, p => p.IsHidden)
-                );
+            var product = await _context.Products
+                .Include(p => p.Categories)
+                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException($"Product with ID {id} not found.");
+
+            product.Title = title;
+            product.Description = description;
+            product.OnSale = onSale;
+            product.Rating = rating;
+            product.Price = price;
+            product.Brand = brand;
+            product.IsFavorite = isFavorite;
+            product.IsHidden = isHidden;
+
+            await UpdateProductCategoriesAsync(product, categories);
+
+            await _context.SaveChangesAsync();
 
             return id;
         }
@@ -117,11 +176,6 @@ namespace App.DataAccess.Repositories
                 .Where(p => p.Id == id)
                 .ExecuteDeleteAsync();
             return id;
-        }
-
-        public Task<Guid> Update(Guid id, string title, string description, bool onSale, double rating, double price, string brand, bool isFavorite, string[] categories, bool isHidden)
-        {
-            throw new NotImplementedException();
         }
     }
 }

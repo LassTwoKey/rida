@@ -11,6 +11,10 @@ namespace App.DataAccess.Configurations
         {
             builder.HasKey(x => x.Id);
 
+            builder.HasMany(x => x.Categories)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.Property(x => x.Title)
                 .HasMaxLength(Product.MAX_TITLE_LENGTH)
                 .IsRequired();

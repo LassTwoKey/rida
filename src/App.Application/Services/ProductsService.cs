@@ -16,7 +16,7 @@ namespace App.Application.Services
         {
             return await _productsRepository.GetById(id);
         }
-        
+
         public async Task<List<Product>> GetAllProducts()
         {
             return await _productsRepository.Get();
@@ -36,7 +36,7 @@ namespace App.Application.Services
             double price,
             string brand,
             bool isFavorite,
-            string[] categories,
+            ICollection<Category> categories,
             bool isHidden
         )
         {
@@ -50,8 +50,7 @@ namespace App.Application.Services
                 brand,
                 isFavorite,
                 categories,
-                isHidden
-            );
+                isHidden);
         }
 
         public async Task<Guid> DeleteProduct(Guid id)

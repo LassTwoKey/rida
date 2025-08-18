@@ -1,4 +1,6 @@
-﻿namespace App.DataAccess.Entites
+﻿using App.Core.Models;
+
+namespace App.DataAccess.Entites
 {
     public class ProductEntity
     {
@@ -11,7 +13,7 @@
         public DateTimeOffset EstimatedDeliveryDate { get; set; }
         public string Brand { get; set; } = string.Empty;
         public bool IsFavorite { get; set; }
-        public string[] Categories { get; set; }
+        public ICollection<CategoryEntity> Categories { get; set; } = new List<CategoryEntity>();
         public bool IsHidden { get; set; }
     }
 }

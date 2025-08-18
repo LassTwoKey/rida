@@ -15,7 +15,7 @@
             double price,
             string brand,
             bool isFavorite,
-            string[] categories,
+            ICollection<Category> categories,
             bool isHidden
         )
         {
@@ -40,8 +40,8 @@
         public DateTimeOffset EstimatedDeliveryDate { get; }
         public string Brand { get; } = string.Empty;
         public bool IsFavorite { get; }
-        public string[] Categories { get; }
         public bool IsHidden { get; }
+        public ICollection<Category> Categories { get; } = new List<Category>();
 
         public static (Product product, string Error) Create(
             Guid id,
@@ -52,7 +52,7 @@
             double price,
             string brand,
             bool isFavorite,
-            string[] categories,
+            ICollection<Category> categories,
             bool isHidden
         )
         {

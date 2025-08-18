@@ -33,7 +33,7 @@ namespace App.Api.Controllers
                 DateTime.Now.AddDays(random.Next(7, 61)),
                 p.Brand,
                 p.IsFavorite,
-                p.Categories
+                [.. p.Categories.Select(c => new CategoriesResponse(c.Id, c.Title, c.Description))]
                 ));
 
             return Ok(productsResponse);
@@ -61,7 +61,7 @@ namespace App.Api.Controllers
                 DateTime.Now.AddDays(random.Next(7, 61)),
                 product.Brand,
                 product.IsFavorite,
-                product.Categories
+                [.. product.Categories.Select(c => new CategoriesResponse(c.Id, c.Title, c.Description))]
                 );
         }
 
@@ -77,7 +77,7 @@ namespace App.Api.Controllers
                 request.Price,
                 request.Brand,
                 request.IsFavorite,
-                request.Categories,
+                [.. request.Categories.Select(c => Category.Create(c.Id, c.Title,c.Description).category)],
                 request.IsHidden
                 );
 
@@ -103,7 +103,7 @@ namespace App.Api.Controllers
                 request.Price,
                 request.Brand,
                 request.IsFavorite,
-                request.Categories,
+                [.. request.Categories.Select(c => Category.Create(c.Id, c.Title, c.Description).category)],
                 request.IsHidden
                 );
 

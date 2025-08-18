@@ -1,4 +1,6 @@
-﻿namespace App.Application.Contracts
+﻿using App.Core.Models;
+
+namespace App.Application.Contracts
 {
     public record ProductsResponse(
         Guid Id,
@@ -10,7 +12,7 @@
         DateTimeOffset EstimatedDeliveryDate,
         string Brand,
         bool IsFavorite,
-        string[] Categories);
+        List<CategoriesResponse> Categories);
 
     public record ProductsRequest(
         string Title,
@@ -20,6 +22,6 @@
         double Price,
         string Brand,
         bool IsFavorite,
-        string[] Categories,
+        List<CategoriesResponse> Categories,
         bool IsHidden);
 }

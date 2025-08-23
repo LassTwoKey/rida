@@ -1,4 +1,6 @@
-﻿namespace App.DataAccess.Entites
+﻿using App.Core.Models;
+
+namespace App.DataAccess.Entites
 {
     public class ProductEntity
     {
@@ -9,8 +11,7 @@
         public double Rating { get; set; }
         public double Price { get; set; }
         public string Brand { get; set; } = string.Empty;
-        public bool IsFavorite { get; set; }
-        public string[] Categories { get; set; }
+        public ICollection<CategoryEntity> Categories { get; set; } = new List<CategoryEntity>();
         public bool IsHidden { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ChangedDate { get; set; }

@@ -40,8 +40,7 @@ namespace App.Api.Controllers
                 p.Price,
                 DateTime.Now.AddDays(random.Next(7, 61)),
                 p.Brand,
-                p.IsFavorite,
-                p.Categories,
+                [.. p.Categories.Select(c => new CategoriesResponse(c.Id, c.Title, c.Description))],
                 p.CreatedDate,
                 p.ChangedDate,
                 p.ImgUrl,
@@ -73,8 +72,7 @@ namespace App.Api.Controllers
                 product.Price,
                 DateTime.Now.AddDays(random.Next(7, 61)),
                 product.Brand,
-                product.IsFavorite,
-                product.Categories,
+                [.. product.Categories.Select(c => new CategoriesResponse(c.Id, c.Title, c.Description))],
                 product.CreatedDate,
                 product.ChangedDate,
                 product.ImgUrl,
@@ -84,7 +82,7 @@ namespace App.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> CreateProduct([FromForm] ProductsRequest request)
+        public async Task<ActionResult<Guid>> CreateProduct([FromBody] ProductsRequest request)
         {
             string imageUrl = "";
             string imgPreviewFile = "";
@@ -92,9 +90,13 @@ namespace App.Api.Controllers
 
             if (request.ImageFile != null)
             {
+                string base64Data = request.ImageFile.Base64Data;
+                byte[] imageBytes = Convert.FromBase64String(base64Data);
+                using var imageStream = new MemoryStream(imageBytes);
+
                 var uploadParams = new ImageUploadParams()
                 {
-                    File = new FileDescription(request.ImageFile.FileName, request.ImageFile.OpenReadStream()),
+                    File = new FileDescription(request.ImageFile.FileName, imageStream),
                     UseFilename = true,
                     UniqueFilename = true,
                     Folder = "rida/products/"
@@ -121,8 +123,7 @@ namespace App.Api.Controllers
                 request.Rating,
                 request.Price,
                 request.Brand,
-                request.IsFavorite,
-                request.Categories,
+                [.. request.Categories.Select(c => Category.Create(c.Id, c.Title, c.Description).category)],
                 request.IsHidden,
                 DateTime.UtcNow,
                 DateTime.UtcNow,
@@ -142,7 +143,7 @@ namespace App.Api.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult<Guid>> UpdateProduct(Guid id,[FromForm] ProductsRequest request)
+        public async Task<ActionResult<Guid>> UpdateProduct(Guid id,[FromBody] ProductsRequest request)
         {
             var foundProduct = await _productsService.GetProductById(id);
 
@@ -157,9 +158,13 @@ namespace App.Api.Controllers
 
             if (request.ImageFile != null)
             {
+                string base64Data = request.ImageFile.Base64Data;
+                byte[] imageBytes = Convert.FromBase64String(base64Data);
+                using var imageStream = new MemoryStream(imageBytes);
+
                 var uploadParams = new ImageUploadParams()
                 {
-                    File = new FileDescription(request.ImageFile.FileName, request.ImageFile.OpenReadStream()),
+                    File = new FileDescription(request.ImageFile.ContentType, imageStream),
                     UseFilename = true,
                     UniqueFilename = true,
                     Folder = "rida/products/"
@@ -192,8 +197,7 @@ namespace App.Api.Controllers
                 request.Rating,
                 request.Price,
                 request.Brand,
-                request.IsFavorite,
-                request.Categories,
+                [.. request.Categories.Select(c => Category.Create(c.Id, c.Title, c.Description).category)],
                 request.IsHidden,
                 DateTime.UtcNow,
                 imageUrl,

@@ -22,6 +22,9 @@ builder.Services.AddDbContext<AppDbContext>(
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowWithCredentials",

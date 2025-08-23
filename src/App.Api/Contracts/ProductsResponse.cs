@@ -9,8 +9,7 @@
         double Price,
         DateTimeOffset EstimatedDeliveryDate,
         string Brand,
-        bool IsFavorite,
-        string[] Categories,
+        List<CategoriesResponse> Categories,
         DateTime CreatedDate,
         DateTime ChangedDate,
         string ImgUrl,
@@ -24,9 +23,7 @@
         double Rating,
         double Price,
         string Brand,
-        bool IsFavorite,
-        string[] Categories,
+        List<CategoriesResponse> Categories,
         bool IsHidden,
-        IFormFile? ImageFile = null
-        );
+        FileContent? ImageFile);
 }

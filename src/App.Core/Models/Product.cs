@@ -14,8 +14,7 @@
             double rating,
             double price,
             string brand,
-            bool isFavorite,
-            string[] categories,
+            ICollection<Category> categories,
             bool isHidden,
             DateTime changedDate,
             DateTime createdDate,
@@ -30,7 +29,6 @@
             Rating = rating;
             Price = price;
             Brand = brand;
-            IsFavorite = isFavorite;
             Categories = categories;
             IsHidden = isHidden;
             CreatedDate = createdDate;
@@ -47,8 +45,7 @@
         public double Rating { get; }
         public double Price { get; }
         public string Brand { get; } = string.Empty;
-        public bool IsFavorite { get; }
-        public string[] Categories { get; }
+        public ICollection<Category> Categories { get; } = [];
         public bool IsHidden { get; }
         public DateTime CreatedDate { get; set; }
         public DateTime ChangedDate { get; set; }
@@ -64,8 +61,7 @@
             double rating,
             double price,
             string brand,
-            bool isFavorite,
-            string[] categories,
+            ICollection<Category> categories,
             bool isHidden,
             DateTime createdDate,
             DateTime changedDate,
@@ -100,15 +96,13 @@
                 rating,
                 price,
                 brand,
-                isFavorite,
                 categories,
                 isHidden,
                 createdDate,
                 changedDate,
                 imgUrl,
                 imgPreviewUrl,
-                imgId
-            );
+                imgId);
 
             return (newPoduct, error);
         }

@@ -9,6 +9,49 @@ namespace App.DataAccess.Repositories
     {
         private readonly AppDbContext _context;
 
+        private async Task UpdateProductCategoriesAsync(ProductEntity product, ICollection<Category> newCategories)
+        {
+            if (newCategories == null || newCategories.Count == 0)
+            {
+                // Если список пуст или null — удаляем все категории
+                product.Categories.Clear();
+                return;
+            }
+
+            // Получаем ID всех категорий из входного списка
+            var requestedCategoryIds = newCategories.Select(c => c.Id).ToList();
+
+            // Находим только те, которые реально существуют в БД
+            var existingValidCategoryIds = await _context.Categories
+                .Where(c => requestedCategoryIds.Contains(c.Id))
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            // Текущие категории у продукта
+            var currentCategoryIds = product.Categories.Select(c => c.Id).ToList();
+
+            // Удаляем категории, которых больше нет в списке (даже если они были)
+            var toRemove = product.Categories
+                .Where(c => !existingValidCategoryIds.Contains(c.Id))
+                .ToList();
+            foreach (var category in toRemove)
+            {
+                product.Categories.Remove(category);
+            }
+
+            // Добавляем только существующие и ещё не привязанные категории
+            var toAdd = existingValidCategoryIds
+                .Where(id => !currentCategoryIds.Contains(id))
+                .Select(id => new CategoryEntity { Id = id })
+                .ToList();
+
+            foreach (var category in toAdd)
+            {
+                _context.Attach(category); // говорим EF: "это существующая сущность"
+                product.Categories.Add(category);
+            }
+        }
+
         public ProductsRepository(AppDbContext context)
         {
             _context = context;
@@ -17,7 +60,9 @@ namespace App.DataAccess.Repositories
         public async Task<List<Product>> Get()
         {
             var productEntities = await _context.Products
-                .AsNoTracking().ToListAsync();
+                .Include(p => p.Categories)
+                .AsNoTracking()
+                .ToListAsync();
 
             var products = productEntities
                 .Select(p => Product.Create(
@@ -28,8 +73,7 @@ namespace App.DataAccess.Repositories
                     p.Rating,
                     p.Price,
                     p.Brand,
-                    p.IsFavorite,
-                    p.Categories,
+                    [.. p.Categories.Select(c => Category.Create(c.Id, c.Title, c.Description).category)],
                     p.IsHidden,
                     p.CreatedDate,
                     p.ChangedDate,
@@ -44,11 +88,16 @@ namespace App.DataAccess.Repositories
         public async Task<Product?> GetById(Guid id)
         {
             var product = await _context.Products
+                .Include(p => p.Categories)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
-            return product == null
-                ? null
-                : Product.Create(
+
+            if (product != null)
+            {
+                var categories = product.Categories.Select(c => Category.Create(
+                    c.Id, c.Title, c.Description).category).ToList();
+
+                return Product.Create(
                     product.Id,
                     product.Title,
                     product.Description,
@@ -56,8 +105,7 @@ namespace App.DataAccess.Repositories
                     product.Rating,
                     product.Price,
                     product.Brand,
-                    product.IsFavorite,
-                    product.Categories,
+                    [.. product.Categories.Select(c => Category.Create(c.Id, c.Title, c.Description).category)],
                     product.IsHidden,
                     product.CreatedDate,
                     product.ChangedDate,
@@ -66,8 +114,17 @@ namespace App.DataAccess.Repositories
                     product.ImgId).product;
         }
 
+            return null;
+        }
+
         public async Task<Guid> Create(Product product)
         {
+            var categories = product.Categories.Select(c => new CategoryEntity() {
+                Id = c.Id,
+                Title = c.Title,
+                Description = c.Description
+            }).ToList();
+
             var productEntity = new ProductEntity
             {
                 Id = product.Id,
@@ -77,14 +134,13 @@ namespace App.DataAccess.Repositories
                 Rating = product.Rating,
                 Price = product.Price,
                 Brand = product.Brand,
-                IsFavorite = product.IsFavorite,
-                Categories = product.Categories,
+                Categories = categories,
                 IsHidden = product.IsHidden,
                 CreatedDate = product.CreatedDate,
                 ChangedDate = product.ChangedDate,
                 ImgUrl = product.ImgUrl,
                 ImgPreviewUrl = product.ImgPreviewUrl,
-                ImgId = product.ImgId,
+                ImgId = product.ImgId
             };
 
             await _context.Products.AddAsync(productEntity);
@@ -101,8 +157,7 @@ namespace App.DataAccess.Repositories
             double rating,
             double price,
             string brand,
-            bool isFavorite,
-            string[] categories,
+            ICollection<Category> categories,
             bool isHidden,
             DateTime changedDate,
             string imgUrl,
@@ -110,23 +165,26 @@ namespace App.DataAccess.Repositories
             string? imgId
         )
         {
-            await _context.Products
-                .Where(p => p.Id == id)
-                .ExecuteUpdateAsync(s => s
-                    .SetProperty(p => p.Title, title)
-                    .SetProperty(p => p.Description, description)
-                    .SetProperty(p => p.Discount, discount)
-                    .SetProperty(p => p.Rating, rating)
-                    .SetProperty(p => p.Price, price)
-                    .SetProperty(p => p.Brand, brand)
-                    .SetProperty(p => p.IsFavorite, isFavorite)
-                    .SetProperty(p => p.Categories, categories)
-                    .SetProperty(p => p.IsHidden, isHidden)
-                    .SetProperty(p => p.ChangedDate, changedDate)
-                    .SetProperty(p => p.ImgUrl, imgUrl)
-                    .SetProperty(p => p.ImgPreviewUrl, imgPreviewUrl)
-                    .SetProperty(p => p.ImgId, imgId)
-                );
+            var product = await _context.Products
+                .Include(p => p.Categories)
+                .FirstOrDefaultAsync(p => p.Id == id)
+                ?? throw new KeyNotFoundException($"Product with ID {id} not found.");
+
+            product.Title = title;
+            product.Description = description;
+            product.Discount = discount;
+            product.Rating = rating;
+            product.Price = price;
+            product.Brand = brand;
+            product.IsHidden = isHidden;
+            product.ChangedDate = changedDate;
+            product.ImgUrl = imgUrl;
+            product.ImgPreviewUrl = imgPreviewUrl;
+            product.ImgId = imgId;
+
+            await UpdateProductCategoriesAsync(product, categories);
+
+            await _context.SaveChangesAsync();
 
             return id;
         }

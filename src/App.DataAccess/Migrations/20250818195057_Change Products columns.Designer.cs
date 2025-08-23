@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace App.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250705143130_AddDatesToProducts")]
-    partial class AddDatesToProducts
+    [Migration("20250818195057_Change Products columns")]
+    partial class ChangeProductscolumns
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,29 @@ namespace App.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("App.DataAccess.Entites.CategoryEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("ProductEntityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductEntityId");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("App.DataAccess.Entites.ProductEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -35,10 +58,6 @@ namespace App.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.PrimitiveCollection<string[]>("Categories")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
                     b.Property<DateTime>("ChangedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -47,7 +66,8 @@ namespace App.DataAccess.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
                     b.Property<int>("Discount")
                         .HasColumnType("integer");
@@ -77,11 +97,25 @@ namespace App.DataAccess.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("App.DataAccess.Entites.CategoryEntity", b =>
+                {
+                    b.HasOne("App.DataAccess.Entites.ProductEntity", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("ProductEntityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("App.DataAccess.Entites.ProductEntity", b =>
+                {
+                    b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618
         }

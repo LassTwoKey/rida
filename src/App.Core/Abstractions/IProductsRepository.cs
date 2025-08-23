@@ -4,6 +4,7 @@ namespace App.Core.Abstractions
 {
     public interface IProductsRepository
     {
+    
         Task<Guid> Create(Product product);
         Task<Guid> Delete(Guid id);
         Task<List<Product>> Get();
@@ -16,8 +17,7 @@ namespace App.Core.Abstractions
             double rating,
             double price,
             string brand,
-            bool isFavorite,
-            string[] categories,
+            ICollection<Category> categories,
             bool isHidden,
             DateTime changedDate,
             string imgUrl,
